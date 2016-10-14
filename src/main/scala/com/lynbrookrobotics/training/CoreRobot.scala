@@ -10,7 +10,7 @@ import com.lynbrookrobotics.training.shooterArm.tasks.ShooterArmJoystickOverride
 
 class CoreRobot(implicit config: RobotConfig, clock: Clock) {
   implicit val driverHardware = config.driver.asHardware
-  implicit val shooterArmHardware = config.shooterArm.ports.asHardware
+  implicit val shooterArmConfig = config.shooterArm
 
   implicit val shooter = new ShooterArm
 

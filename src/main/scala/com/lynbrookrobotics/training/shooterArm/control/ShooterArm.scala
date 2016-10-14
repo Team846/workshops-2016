@@ -1,17 +1,31 @@
 package com.lynbrookrobotics.training.shooterArm.control
 
 import com.lynbrookrobotics.potassium.{Component, Signal}
-import com.lynbrookrobotics.training.hardware.ShooterArmHardware
 import squants.electro.{ElectricPotential, Volts}
 import squants.time.Milliseconds
-
 import com.lynbrookrobotics.training.WPIClock.notifierClock
+import com.lynbrookrobotics.training.config.ShooterArmConfig
 
-class ShooterArm(implicit hardware: ShooterArmHardware)
+class ShooterArm(implicit config: ShooterArmConfig)
   extends Component[ElectricPotential](Milliseconds(5)) {
+  val hardware = config.ports.asHardware
+
   val defaultController = Signal.constant(Volts(0)).toPeriodic
 
+  val beyondForward = config.shooterArmAngle.map(_ > config.props.forwardLimit)
+  val belowReverse = config.shooterArmAngle.map(_ < config.props.reverseLimit)
+
+  def clamp(value: Double, low: Double, high: Double): Double = {
+    (value min high) max low
+  }
+
   override def applySignal(signal: ElectricPotential): Unit = {
-    hardware.armMotor.set(signal / Volts(12))
+    val out = if (beyondForward.get && signal.to(Volts) > 0) {
+      Volts(0)
+    } else if (belowReverse.get && signal.to(Volts) < 0) {
+      Volts(0)
+    } else signal
+
+    hardware.armMotor.set(clamp(out / Volts(12), -config.props.maxSpeed, config.props.maxSpeed))
   }
 }
