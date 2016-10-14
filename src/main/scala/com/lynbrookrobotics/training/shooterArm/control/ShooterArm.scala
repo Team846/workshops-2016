@@ -10,7 +10,7 @@ class ShooterArm(implicit config: ShooterArmConfig)
   extends Component[ElectricPotential](Milliseconds(5)) {
   val hardware = config.ports.asHardware
 
-  val defaultController = Signal.constant(Volts(0)).toPeriodic
+  override def defaultController = Signal.constant(Volts(0)).toPeriodic
 
   val beyondForward = config.shooterArmAngle.map(_ > config.props.forwardLimit)
   val belowReverse = config.shooterArmAngle.map(_ < config.props.reverseLimit)
@@ -25,6 +25,8 @@ class ShooterArm(implicit config: ShooterArmConfig)
     } else if (belowReverse.get && signal.to(Volts) < 0) {
       Volts(0)
     } else signal
+
+    println(clamp(out / Volts(12), -config.props.maxSpeed, config.props.maxSpeed))
 
     hardware.armMotor.set(clamp(out / Volts(12), -config.props.maxSpeed, config.props.maxSpeed))
   }
