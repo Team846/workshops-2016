@@ -7,5 +7,15 @@ import com.sun.management.OperatingSystemMXBean
 object SystemStats {
   private val osBean = ManagementFactory.getOperatingSystemMXBean.asInstanceOf[OperatingSystemMXBean]
 
-  def currentCPUUsage = osBean.getSystemCpuLoad
+  private var lastRequest = 0L
+  private var lastLoad = 0D
+
+  def currentCPUUsage = {
+    if (System.currentTimeMillis() - lastRequest > 100) {
+      lastRequest = System.currentTimeMillis()
+      lastLoad = osBean.getSystemCpuLoad
+    }
+
+    lastLoad
+  }
 }
