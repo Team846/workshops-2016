@@ -7,9 +7,8 @@ import squants.time.{Microseconds, Seconds}
 
 object WPIClock {
   implicit val notifierClock = new Clock {
-    var lastTime: Option[Time] = None
-
     override def apply(period: Time)(thunk: (Time) => Unit): Cancel = {
+      var lastTime: Option[Time] = None
       val currentTime = Microseconds(Utility.getFPGATime)
 
       val notifier = new Notifier(new Runnable {
