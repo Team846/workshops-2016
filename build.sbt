@@ -18,3 +18,5 @@ libraryDependencies += "com.lynbrookrobotics" %% "funky-dashboard" % "0.2.0-SNAP
 
 libraryDependencies += "edu.wpi.first" % "wpilib" % "0.1.0.201603020231"
 libraryDependencies += "edu.wpi.first" % "networktables" % "0.1.0.201603020231"
+
+staticIP := true
