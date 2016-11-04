@@ -12,7 +12,7 @@ class GoToRPM(hardware: ShooterFlywheelHardware, shooterFlywheel: ShooterFlywhee
     val rightRPM: Signal[Dimensionless] = hardware.rightHall.signal
 
     val signal = ShooterFlywheelControllers.rpmControl(
-      leftRPM, rightRPM, rpm, 5.0/12.0)
+      leftRPM, rightRPM, rpm, 0.1/12.0)
     shooterFlywheel.setController(signal)
   }
 
