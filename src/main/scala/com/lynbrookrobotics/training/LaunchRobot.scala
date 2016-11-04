@@ -9,7 +9,13 @@ class LaunchRobot extends IterativeRobot {
   implicit val config = RobotConfig(
     DriverConfig(
       operatorPort = 1
-    ) // TODO: add configuration for flywheel
+    ),
+    ShooterFlywheelConfig(
+      leftMotorPort  = 3,
+      rightMotorPort  = 2,
+      leftHallPort  = 0,
+      rightHallPort = 1
+    )
   )
 
   private var coreRobot: CoreRobot = null
