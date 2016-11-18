@@ -28,7 +28,6 @@ class CoreRobot(implicit config: RobotConfig, clock: Clock) {
   driverHardware.operatorJoystick.buttonPressed(3).foreach(new GoToRPM(shooterFlywheelHardware, shooterFlywheel, 4000.0))
   driverHardware.operatorJoystick.buttonPressed(4).foreach(new GoToRPM(shooterFlywheelHardware, shooterFlywheel, 6000.0))
 
-  // Plot the CPU usage to a dashboard (don't worry too much about what's going on here)
   implicit val system = ActorSystem("funky-dashboard")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
